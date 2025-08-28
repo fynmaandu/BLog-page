@@ -24,14 +24,15 @@ jobs:
             pandoc "$file" -s -o "${base}.html"
           done
 
-      - name: Update index.html routes
+      - name: Add links for new posts into index.html
         run: |
-          echo "<html><body><h1>My Blog</h1><ul>" > index.html
           for file in *.tex; do
             base=$(basename "$file" .tex)
-            echo "<li><a href=\"${base}.html\">${base}</a></li>" >> index.html
+            if ! grep -q "$base.html" index.html; then
+              # Insert before </body>
+              sed -i "/<\/body>/i <p><a href=\"$base.html\">$base</a></p>" index.html
+            fi
           done
-          echo "</ul></body></html>" >> index.html
 
       - name: Commit generated HTML
         run: |
