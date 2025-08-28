@@ -2,146 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Physics & Math Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My TeX Blog Post</title>
+
+  <!-- Make it mobile-friendly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    MathJax = {
+      tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+      svg: {fontCache: 'global'}
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <style>
     body {
-      background: #0a0e27;
-      color: #00ff41;
-      font-family: monospace;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      padding: 15px;
-      border-bottom: 1px solid #00ff41;
-      font-size: 14px;
-    }
-    header a {
-      color: #00ff41;
-      text-decoration: none;
-      margin-right: 20px;
-    }
-    header a:hover {
-      text-shadow: 0 0 5px #00ff41;
-    }
-    .container {
       max-width: 800px;
       margin: auto;
-      padding: 20px;
+      padding: 2rem;
+      font-family: Georgia, serif;
+      line-height: 1.6;
+      background: #fafafa;
     }
-    .post {
-      border: 1px solid #00ff41;
-      padding: 15px;
-      margin: 20px 0;
-      border-radius: 6px;
-    }
-    .post h3 {
-      margin: 0 0 10px;
-      color: #4499ff;
-    }
-    .date {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 10px;
-    }
-    .excerpt {
-      color: #ccc;
-      line-height: 1.5;
-    }
+    h1, h2, h3 { font-family: sans-serif; }
+    img { max-width: 100%; display: block; margin: 1rem auto; }
+    code { background: #eee; padding: 0.2em 0.4em; }
   </style>
 </head>
+
 <body>
-  <header>
-    <a href="#recent">recent</a>
-    <a href="#physics">physics</a>
-    <a href="#math">math</a>
-    <a href="#about">about</a>
-    <a href="#contact">contact</a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-    <a href="https://github.com/yourhandle">github</a>
-    <a href="https://x.com/yourhandle">x</a>
-  </header>
+  <h1>My LaTeX Article</h1>
+  <p>This is some text that came from <code>.tex</code>.</p>
 
-  <div class="container" id="content">
-    <!-- Recent posts -->
-    <div id="recent">
-      <div class="post">
-        <h3>Relativity</h3>
-        <div class="date">2024-08-20</div>
-        <div class="excerpt">
-          If you are a highschooler and want to know how to write down math of Einstein's postulates—you arrived at the perfect place.
-        </div>
-      </div>
-      <div class="post">
-        <h3>Density Matrices</h3>
-        <div class="date">2024-08-15</div>
-        <div class="excerpt">
-          Understanding how electric and magnetic fields propagate through space as electromagnetic radiation.
-        </div>
-      </div>
-      <div class="post">
-        <h3>Bite sized (fun?) facts about Soft theorems</h3>
-        <div class="date">2024-08-10</div>
-        <div class="excerpt">
-          How time flows differently for observers in relative motion, with practical examples and mathematical derivations.
-        </div>
-      </div>
-      <div class="post">
-        <h3>ASAP Relativity</h3>
-        <div class="date">2025-08-28</div>
-        <div class="excerpt">
-          Automatically built from my LaTeX source with images & math.
-        </div>
-      </div>
-    </div>
+  <h2>Math Example</h2>
+  <p>Einstein’s mass–energy relation: $E = mc^2$</p>
+  <p>A displayed equation:</p>
+  $$\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}$$
 
-    <!-- Physics section -->
-    <div id="physics">
-      <div class="post">
-        <h3>Physics Posts</h3>
-        <div class="excerpt">🔬 Relativity, Soft theorems, Density matrices…</div>
-      </div>
-    </div>
+  <h2>Image Example</h2>
+  <p>Here’s an image extracted by Pandoc:</p>
+  <img src="media/image1.png" alt="Extracted figure">
 
-    <!-- Math section -->
-    <div id="math">
-      <div class="post">
-        <h3>Math Posts</h3>
-        <div class="excerpt">📐 Coming soon…</div>
-      </div>
-    </div>
-
-    <!-- About section -->
-    <div id="about" class="post">
-      <h3>About Me</h3>
-      <div class="excerpt">
-        🔬 About Me<br><br>
-        I'm an amateur physicist and an avid tourist in the lands of mathematics – <br><br>
-        My interests include:<br>
-        • Algebraic QFT<br>
-        • Knot theory and TQFTs <br>
-        • Soft theorems and Asymptotic symmetries<br>
-        • String theory <br>
-        • Amplituhedra → pls share some simple examplitudes – I am too confused!!<br><br>
-        Education: Masters in Physics and B.E Mechanical<br>
-        Current: Research<br>
-        Location: love my stable Minkowski 🌌
-      </div>
-    </div>
-
-    <!-- Contact section -->
-    <div id="contact" class="post">
-      <h3>Contact</h3>
-      <div class="excerpt">
-        📧 Contact Information:<br><br>
-        Email: nerdyphoton@gmail.com<br>
-        GitHub: github.com/yourhandle<br>
-        Twitter: @fynmaaandu<br><br>
-        "Pls be patient – My brane can't hold that many string of thoughts."<br>
-        Feel free to reach out with questions or collaboration ideas!
-      </div>
-    </div>
-  </div>
+  <h2>Bibliography Example</h2>
+  <p>Pandoc will also convert citations if you use <code>--citeproc</code>.</p>
 </body>
 </html>
