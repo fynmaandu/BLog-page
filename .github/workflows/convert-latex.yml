@@ -19,7 +19,7 @@ jobs:
 
       - name: Convert sample.tex → index.html
         run: |
-          pandoc sample.tex -s -o index.html --mathjax --extract-media=media
+          pandoc sample.tex -s -o index.html 
 
       - name: Commit generated HTML
         run: |
