@@ -2,194 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Physics & Math Blog</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       background: #0a0e27;
       color: #00ff41;
-      font-family: 'JetBrains Mono', monospace;
-      overflow-x: hidden;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
     }
-
-    .matrix-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      overflow: hidden;
+    header {
+      padding: 15px;
+      border-bottom: 1px solid #00ff41;
+      font-size: 14px;
     }
-    .matrix-column {
-      position: absolute;
-      top: -100px;
-      font-size: 12px;
-      color: rgba(0, 255, 65, 0.05);
-      animation: fall linear infinite;
+    header a {
+      color: #00ff41;
+      text-decoration: none;
+      margin-right: 20px;
     }
-    @keyframes fall {
-      0% { transform: translateY(-100px); }
-      100% { transform: translateY(100vh); }
+    header a:hover {
+      text-shadow: 0 0 5px #00ff41;
     }
-
-    .header {
-      text-align: center;
+    .container {
+      max-width: 800px;
+      margin: auto;
       padding: 20px;
     }
-    .ascii-art {
-      color: #ff6b35;
-      font-size: 10px;
-      line-height: 1.1;
-      margin-bottom: 15px;
-      text-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
-    }
-    .welcome-text {
-      font-size: 18px;
-      text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
-      margin-bottom: 20px;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-    .nav-buttons button {
-      background: rgba(0, 255, 65, 0.1);
+    .post {
       border: 1px solid #00ff41;
-      color: #00ff41;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-      text-shadow: 0 0 8px #00ff41;
-    }
-    .nav-buttons button:hover {
-      background: #00ff41;
-      color: #0a0e27;
-      box-shadow: 0 0 15px #00ff41;
-    }
-
-    .blog-container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 10px;
-    }
-    .blog-post {
-      background: rgba(0, 50, 100, 0.1);
-      border: 1px solid #1a4480;
-      border-radius: 8px;
       padding: 15px;
-      margin: 15px 0;
-      color: #e0e0e0;
-      box-shadow: 0 0 10px rgba(0,255,65,0.2);
+      margin: 20px 0;
+      border-radius: 6px;
     }
-    .blog-post h3 {
+    .post h3 {
+      margin: 0 0 10px;
       color: #4499ff;
-      margin-bottom: 8px;
-      font-size: 18px;
     }
-    .blog-post .date {
+    .date {
       font-size: 12px;
       color: #888;
       margin-bottom: 10px;
     }
-    .blog-post .excerpt {
+    .excerpt {
       color: #ccc;
       line-height: 1.5;
     }
   </style>
 </head>
 <body>
-  <div class="matrix-bg" id="matrixBg"></div>
+  <header>
+    <a href="#recent">recent</a>
+    <a href="#physics">physics</a>
+    <a href="#math">math</a>
+    <a href="#about">about</a>
+    <a href="#contact">contact</a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href="https://github.com/yourhandle">github</a>
+    <a href="https://x.com/yourhandle">x</a>
+  </header>
 
-  <div class="header">
-    <div class="ascii-art">
-╔════════════════════════════════════════════════════════╗<br>
-║             🔬 PHYSICS & MATH BLOG 📐                  ║<br>
-╚════════════════════════════════════════════════════════╝
+  <div class="container" id="content">
+    <!-- Recent posts -->
+    <div id="recent">
+      <div class="post">
+        <h3>Relativity</h3>
+        <div class="date">2024-08-20</div>
+        <div class="excerpt">
+          If you are a highschooler and want to know how to write down math of Einstein's postulates—you arrived at the perfect place.
+        </div>
+      </div>
+      <div class="post">
+        <h3>Density Matrices</h3>
+        <div class="date">2024-08-15</div>
+        <div class="excerpt">
+          Understanding how electric and magnetic fields propagate through space as electromagnetic radiation.
+        </div>
+      </div>
+      <div class="post">
+        <h3>Bite sized (fun?) facts about Soft theorems</h3>
+        <div class="date">2024-08-10</div>
+        <div class="excerpt">
+          How time flows differently for observers in relative motion, with practical examples and mathematical derivations.
+        </div>
+      </div>
+      <div class="post">
+        <h3>ASAP Relativity</h3>
+        <div class="date">2025-08-28</div>
+        <div class="excerpt">
+          Automatically built from my LaTeX source with images & math.
+        </div>
+      </div>
     </div>
-    <div class="welcome-text">Welcome to my Physics & Math blog!</div>
 
-    <div class="nav-buttons">
-      <button onclick="showCategory('all')">📚 Recent</button>
-      <button onclick="showCategory('physics')">🔬 Physics</button>
-      <button onclick="showCategory('math')">📐 Math</button>
-      <button onclick="showCategory('about')">ℹ️ About</button>
-      <button onclick="showCategory('contact')">✉️ Contact</button>
+    <!-- Physics section -->
+    <div id="physics">
+      <div class="post">
+        <h3>Physics Posts</h3>
+        <div class="excerpt">🔬 Relativity, Soft theorems, Density matrices…</div>
+      </div>
+    </div>
+
+    <!-- Math section -->
+    <div id="math">
+      <div class="post">
+        <h3>Math Posts</h3>
+        <div class="excerpt">📐 Coming soon…</div>
+      </div>
+    </div>
+
+    <!-- About section -->
+    <div id="about" class="post">
+      <h3>About Me</h3>
+      <div class="excerpt">
+        🔬 About Me<br><br>
+        I'm an amateur physicist and an avid tourist in the lands of mathematics – <br><br>
+        My interests include:<br>
+        • Algebraic QFT<br>
+        • Knot theory and TQFTs <br>
+        • Soft theorems and Asymptotic symmetries<br>
+        • String theory <br>
+        • Amplituhedra → pls share some simple examplitudes – I am too confused!!<br><br>
+        Education: Masters in Physics and B.E Mechanical<br>
+        Current: Research<br>
+        Location: love my stable Minkowski 🌌
+      </div>
+    </div>
+
+    <!-- Contact section -->
+    <div id="contact" class="post">
+      <h3>Contact</h3>
+      <div class="excerpt">
+        📧 Contact Information:<br><br>
+        Email: nerdyphoton@gmail.com<br>
+        GitHub: github.com/yourhandle<br>
+        Twitter: @fynmaaandu<br><br>
+        "Pls be patient – My brane can't hold that many string of thoughts."<br>
+        Feel free to reach out with questions or collaboration ideas!
+      </div>
     </div>
   </div>
-
-  <div class="blog-container" id="blogContainer"></div>
-
-  <script>
-    const matrixBg = document.getElementById('matrixBg');
-    function createMatrixRain() {
-      const chars = '∂∇∮∑∏λμπσφψΩ∞≈≠≤≥∈∉∧∨¬→↔∀∃∅ℕℤℚℝℂ';
-      for (let i = 0; i < 15; i++) {
-        const column = document.createElement('div');
-        column.className = 'matrix-column';
-        column.style.left = Math.random() * 100 + 'vw';
-        column.style.animationDuration = (Math.random() * 4 + 3) + 's';
-        column.style.animationDelay = Math.random() * 2 + 's';
-        column.textContent = Array.from({length: 15}, () => 
-          chars[Math.floor(Math.random() * chars.length)]).join('\n');
-        matrixBg.appendChild(column);
-        setTimeout(() => column.remove(), 10000);
-      }
-    }
-    setInterval(createMatrixRain, 800);
-
-    const posts = [
-      {title: "Relativity", date: "2024-08-20", excerpt: "Intro to Einstein's postulates..."},
-      {title: "Density Matrices", date: "2024-08-15", excerpt: "Understanding quantum states..."},
-      {title: "Soft Theorems", date: "2024-08-10", excerpt: "Some bite-sized fun facts..."},
-      {title: "ASAP Relativity", date: "2025-08-28", excerpt: "Built automatically from LaTeX source..."}
-    ];
-
-    function renderPosts(list) {
-      const container = document.getElementById("blogContainer");
-      container.innerHTML = "";
-      list.forEach(p => {
-        container.innerHTML += `
-          <div class="blog-post">
-            <h3>${p.title}</h3>
-            <div class="date">${p.date}</div>
-            <div class="excerpt">${p.excerpt}</div>
-          </div>`;
-      });
-    }
-
-    function showCategory(cat) {
-      if (cat === 'all') renderPosts(posts);
-      else if (cat === 'physics') renderPosts(posts.filter(p => p.title.includes("Relativity") || p.title.includes("Soft")));
-      else if (cat === 'math') renderPosts(posts.filter(p => p.title.includes("Density")));
-      else if (cat === 'about') {
-        document.getElementById("blogContainer").innerHTML = `
-          <div class="blog-post">
-            <h3>About Me</h3>
-            <div class="excerpt">Amateur physicist, lover of math, interested in QFT, TQFT, string theory, amplituhedra.</div>
-          </div>`;
-      }
-      else if (cat === 'contact') {
-        document.getElementById("blogContainer").innerHTML = `
-          <div class="blog-post">
-            <h3>Contact</h3>
-            <div class="excerpt">📧 Email: nerdyphoton@gmail.com <br> GitHub: github.com/yourhandle <br> Twitter: @fynmaaandu</div>
-          </div>`;
-      }
-    }
-
-    // show recent on load
-    showCategory('all');
-  </script>
 </body>
 </html>
-
