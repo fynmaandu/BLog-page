@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics & Math Terminal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e27;
+            color: #00ff41;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        .terminal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 8px 8px 0 0;
+            padding: 10px 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn.close { background: #ff5f57; }
+        .btn.minimize { background: #ffbd2e; }
+        .btn.maximize { background: #28ca42; }
+
+        .terminal-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .terminal-body {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            min-height: calc(100vh - 100px);
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-text {
+            color: #00ff41;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+
+        .ascii-art {
+            color: #ff6b35;
+            font-size: 10px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .prompt {
+            color: #ff6b35;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #00ff41;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            width: 100%;
+            caret-color: #00ff41;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #00ff41;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .output {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .blog-post {
+            background: rgba(0, 50, 100, 0.1);
+            border: 1px solid #1a4480;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #e0e0e0;
+        }
+
+        .blog-post h3 {
+            color: #4499ff;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .blog-post .date {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .blog-post .excerpt {
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .error {
+            color: #ff4444;
+        }
+
+        .success {
+            color: #44ff44;
+        }
+
+        .info {
+            color: #4499ff;
+        }
+
+        .physics {
+            color: #ff6b9d;
+        }
+
+        .math {
+            color: #6bffb3;
+        }
+
+        .equation {
+            background: rgba(100, 0, 100, 0.2);
+            border-left: 3px solid #ff6b9d;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Times New Roman', serif;
+            color: #fff;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(0, 255, 65, 0.05);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(60, end);
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .help-section {
+            color: #ffaa44;
+            margin-bottom: 5px;
+        }
+
+        .command-desc {
+            color: #ccc;
+            margin-left: 15px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrixBg"></div>
+    
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <button class="btn close"></button>
+                <button class="btn minimize"></button>
+                <button class="btn maximize"></button>
+            </div>
+            <div class="terminal-title">Physics & Math Terminal Blog</div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="ascii-art">
+    ╔═════════════════════════════════════════════════════════════════╗
+    ║                    🔬 PHYSICS & MATH TERMINAL 📐                ║
+    ║                                                                 ║
+    ║     ∂²ψ        ∇²φ = ρ/ε₀        E = mc²        ∮ E⋅da = Q/ε₀   ║
+    ║    ──── = Hψ                                                    ║
+    ║     ∂t²                                                         ║
+    ║                                                                 ║
+    ║           "The universe is written in mathematical language"    ║
+    ║                              - Galileo Galilei                 ║
+    ║                                                                 ║
+    ╚═════════════════════════════════════════════════════════════════╝
+            </div>
+            
+            <div class="welcome-text typewriter">
+                Welcome to my Physics & Math blog! Type 'help' for navigation commands.
+            </div>
+            
+            <div id="terminal-output"></div>
+            
+            <div class="command-line">
+                <span class="prompt">physicist@blog:~$</span>
+                <div class="input-container">
+                    <input type="text" class="terminal-input" id="terminalInput" autofocus>
+                    <span class="cursor" id="cursor"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminal-output');
+        const cursor = document.getElementById('cursor');
+        const matrixBg = document.getElementById('matrixBg');
+
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        // Sample blog posts data
+        const blogPosts = {
+            physics: [
+                {
+                    title: "Quantum Mechanics: The Wave-Particle Duality",
+                    date: "2024-08-20",
+                    excerpt: "Exploring the fundamental principle that matter and energy exhibit both wave and particle characteristics. From de Broglie wavelengths to the double-slit experiment.",
+                    content: "The wave-particle duality is one of the most fascinating aspects of quantum mechanics...",
+                    equations: ["λ = h/p", "E = ħω"]
+                },
+                {
+                    title: "Maxwell's Equations and Electromagnetic Waves",
+                    date: "2024-08-15",
+                    excerpt: "Understanding how electric and magnetic fields propagate through space as electromagnetic radiation.",
+                    content: "Maxwell's equations describe how electric and magnetic fields are generated...",
+                    equations: ["∇⋅E = ρ/ε₀", "∇×B = μ₀J + μ₀ε₀∂E/∂t"]
+                },
+                {
+                    title: "Special Relativity: Time Dilation Explained",
+                    date: "2024-08-10",
+                    excerpt: "How time flows differently for observers in relative motion, with practical examples and mathematical derivations.",
+                    content: "Einstein's theory of special relativity revolutionized our understanding of space and time...",
+                    equations: ["Δt' = γΔt", "γ = 1/√(1-v²/c²)"]
+                }
+            ],
+            math: [
+                {
+                    title: "Complex Analysis: Contour Integration",
+                    date: "2024-08-18",
+                    excerpt: "Exploring the residue theorem and its applications in evaluating complex integrals along closed contours.",
+                    content: "Complex analysis provides powerful tools for solving real-world problems...",
+                    equations: ["∮_C f(z)dz = 2πi∑Res(f,ak)", "Res(f,a) = lim_{z→a} (z-a)f(z)"]
+                },
+                {
+                    title: "Differential Equations: Separation of Variables",
+                    date: "2024-08-12",
+                    excerpt: "A fundamental technique for solving ordinary differential equations by separating variables.",
+                    content: "Many physical phenomena can be modeled using differential equations...",
+                    equations: ["dy/dx = g(x)h(y)", "∫dy/h(y) = ∫g(x)dx"]
+                },
+                {
+                    title: "Linear Algebra: Eigenvalues and Eigenvectors",
+                    date: "2024-08-05",
+                    excerpt: "Understanding the geometric meaning of eigenvalues and their role in matrix transformations.",
+                    content: "Eigenvalues and eigenvectors are fundamental concepts in linear algebra...",
+                    equations: ["Av = λv", "det(A - λI) = 0"]
+                }
+            ]
+        };
+
+        // Matrix background effect
+        function createMatrixRain() {
+            const chars = '∂∇∮∑∏λμπσφψΩ∞≈≠≤≥∈∉∧∨¬→↔∀∃∅ℕℤℚℝℂ';
+            
+            for (let i = 0; i < 15; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + 'vw';
+                column.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                column.style.animationDelay = Math.random() * 2 + 's';
+                
+                let columnText = '';
+                for (let j = 0; j < 15; j++) {
+                    columnText += chars[Math.floor(Math.random() * chars.length)] + '\n';
+                }
+                column.textContent = columnText;
+                
+                matrixBg.appendChild(column);
+                
+                setTimeout(() => {
+                    column.remove();
+                }, 10000);
+            }
+        }
+
+        setInterval(createMatrixRain, 800);
+
+        // Available commands
+        const commands = {
+            help: {
+                description: 'Show available commands',
+                execute: () => `
+<div class="help-section">📚 Navigation Commands:</div>
+<div class="command-desc">blog          - Show recent blog posts</div>
+<div class="command-desc">physics       - Show physics posts</div>
+<div class="command-desc">math          - Show mathematics posts</div>
+<div class="command-desc">post [id]     - Read specific post (use number from listings)</div>
+<div class="command-desc">about         - About me and this blog</div>
+<div class="command-desc">contact       - Contact information</div>
+
+<div class="help-section">🔬 Physics Tools:</div>
+<div class="command-desc">constants     - Physical constants</div>
+<div class="command-desc">units         - Unit conversions</div>
+<div class="command-desc">equation [name] - Show famous physics equations</div>
+
+<div class="help-section">📐 Math Tools:</div>
+<div class="command-desc">formula [name] - Mathematical formulas</div>
+<div class="command-desc">derive [topic] - Mathematical derivations</div>
+
+<div class="help-section">⚙️ System:</div>
+<div class="command-desc">clear         - Clear terminal</div>
+<div class="command-desc">date          - Current date</div>
+<div class="command-desc">whoami        - Current user</div>
+                `
+            },
+            
+            about: {
+                description: 'About the author',
+                execute: () => `
+🔬 About Me
+
+I'm a physicist and mathematician passionate about exploring the fundamental 
+laws that govern our universe. This terminal-style blog serves as my digital 
+notebook where I share insights, derivations, and explanations of complex 
+topics in physics and mathematics.
+
+My interests include:
+• Quantum Mechanics & Field Theory
+• Mathematical Physics & Analysis  
+• Computational Methods
+• Teaching & Science Communication
+
+"The important thing is not to stop questioning. Curiosity has its own 
+reason for existing." - Albert Einstein
+
+Education: Ph.D. in Theoretical Physics
+Current: Research & Teaching
+Location: Academic Universe 🌌
+                `
+            },
+
+            blog: {
+                description: 'Show all recent posts',
+                execute: () => {
+                    let output = '<div class="info">📚 Recent Blog Posts:\n\n</div>';
+                    let postId = 1;
+                    
+                    [...blogPosts.physics.slice(0, 2), ...blogPosts.math.slice(0, 2)].forEach(post => {
+                        output += `<div class="blog-post">
+<h3>[${postId}] ${post.title}</h3>
+<div class="date">${post.date}</div>
+<div class="excerpt">${post.excerpt}</div>
+</div>`;
+                        postId++;
+                    });
+                    
+                    output += '\nUse "post [number]" to read full articles or "physics"/"math" for category-specific posts.';
+                    return output;
+                }
+            },
+
+            physics: {
+                description: 'Show physics posts',
+                execute: () => {
+                    let output = '<div class="physics">🔬 Physics Posts:\n\n</div>';
+                    
+                    blogPosts.physics.forEach((post, index) => {
+                        output += `<div class="blog-post">
+<h3>[P${index + 1}] ${post.title}</h3>
+<div class="date">${post.date}</div>
+<div class="excerpt">${post.excerpt}</div>
+</div>`;
+                    });
+                    
+                    return output;
+                }
+            },
+
+            math: {
+                description: 'Show math posts',
+                execute: () => {
+                    let output = '<div class="math">📐 Mathematics Posts:\n\n</div>';
+                    
+                    blogPosts.math.forEach((post, index) => {
+                        output += `<div class="blog-post">
+<h3>[M${index + 1}] ${post.title}</h3>
+<div class="date">${post.date}</div>
+<div class="excerpt">${post.excerpt}</div>
+</div>`;
+                    });
+                    
+                    return output;
+                }
+            },
+
+            post: {
+                description: 'Read a specific post',
+                execute: (args) => {
+                    const id = parseInt(args[0]);
+                    if (!id) return 'Usage: post [number]\nExample: post 1';
+                    
+                    const allPosts = [...blogPosts.physics, ...blogPosts.math];
+                    const post = allPosts[id - 1];
+                    
+                    if (!post) return `Post ${id} not found. Use 'blog' to see available posts.`;
+                    
+                    let output = `<div class="blog-post">
+<h3>${post.title}</h3>
+<div class="date">Published: ${post.date}</div>
+<div class="excerpt">${post.content}</div>`;
+
+                    if (post.equations) {
+                        output += '<div class="equation">Key Equations:\n';
+                        post.equations.forEach(eq => {
+                            output += `${eq}\n`;
+                        });
+                        output += '</div>';
+                    }
+
+                    output += '</div>';
+                    return output;
+                }
+            },
+
+            constants: {
+                description: 'Physical constants',
+                execute: () => `
+🔬 Fundamental Physical Constants:
+
+c  = 2.998×10⁸ m/s        (Speed of light)
+h  = 6.626×10⁻³⁴ J⋅s     (Planck constant)
+ħ  = 1.055×10⁻³⁴ J⋅s     (Reduced Planck constant)
+e  = 1.602×10⁻¹⁹ C       (Elementary charge)
+me = 9.109×10⁻³¹ kg      (Electron mass)
+mp = 1.673×10⁻²⁷ kg      (Proton mass)
+ε₀ = 8.854×10⁻¹² F/m     (Vacuum permittivity)
+μ₀ = 4π×10⁻⁷ H/m         (Vacuum permeability)
+k  = 1.381×10⁻²³ J/K     (Boltzmann constant)
+G  = 6.674×10⁻¹¹ m³/kg⋅s² (Gravitational constant)
+                `
+            },
+
+            equation: {
+                description: 'Show famous physics equations',
+                execute: (args) => {
+                    const equations = {
+                        einstein: 'E = mc²   (Mass-energy equivalence)',
+                        schrodinger: 'iħ∂ψ/∂t = Ĥψ   (Schrödinger equation)',
+                        maxwell: '∇⋅E = ρ/ε₀, ∇×B = μ₀J + μ₀ε₀∂E/∂t   (Maxwell equations)',
+                        newton: 'F = ma   (Newton\'s second law)',
+                        planck: 'E = ħω   (Planck relation)',
+                        uncertainty: 'ΔxΔp ≥ ħ/2   (Heisenberg uncertainty principle)',
+                        lorentz: 'γ = 1/√(1-v²/c²)   (Lorentz factor)'
+                    };
+
+                    const name = args[0];
+                    if (!name) {
+                        return 'Available equations: ' + Object.keys(equations).join(', ') + 
+                               '\nUsage: equation [name]';
+                    }
+
+                    return equations[name] || `Equation '${name}' not found.`;
+                }
+            },
+
+            contact: {
+                description: 'Contact information',
+                execute: () => `
+📧 Contact Information:
+
+Email: physicist@yourdomain.com
+GitHub: github.com/yourhandle
+ORCID: 0000-0000-0000-0000
+ResearchGate: researchgate.net/profile/yourname
+
+Office Hours: Monday-Friday 2:00-4:00 PM
+Location: Department of Physics, Your University
+
+"The best way to learn is to teach others."
+Feel free to reach out with questions or collaboration ideas!
+                `
+            },
+
+            whoami: {
+                description: 'Display current user',
+                execute: () => 'theoretical_physicist'
+            },
+
+            date: {
+                description: 'Show current date and time',
+                execute: () => new Date().toString()
+            },
+
+            clear: {
+                description: 'Clear the terminal',
+                execute: () => {
+                    terminalOutput.innerHTML = '';
+                    return '';
+                }
+            }
+        };
+
+        // Handle input
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const input = this.value.trim();
+                if (input) {
+                    commandHistory.unshift(input);
+                    historyIndex = -1;
+                    processCommand(input);
+                } else {
+                    addOutput('', 'command-line');
+                }
+                this.value = '';
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    this.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex > -1) {
+                    historyIndex--;
+                    this.value = historyIndex >= 0 ? commandHistory[historyIndex] : '';
+                }
+            }
+        });
+
+        function processCommand(input) {
+            addOutput(`physicist@blog:~$ ${input}`, 'command-line');
+            
+            const parts = input.split(' ');
+            const command = parts[0].toLowerCase();
+            const args = parts.slice(1);
+
+            if (commands[command]) {
+                const result = commands[command].execute(args);
+                if (result) {
+                    addOutput(result, command === 'clear' ? '' : 'output');
+                }
+            } else {
+                addOutput(`Command not found: ${command}. Type 'help' for available commands.`, 'error');
+            }
+        }
+
+        function addOutput(text, className) {
+            const div = document.createElement('div');
+            div.className = className || 'output';
+            div.innerHTML = text;
+            terminalOutput.appendChild(div);
+            terminalInput.scrollIntoView();
+        }
+
+        // Keep focus on input
+        document.addEventListener('click', () => {
+            terminalInput.focus();
+        });
+
+        // Cursor effects
+        terminalInput.addEventListener('focus', () => {
+            cursor.style.display = 'inline-block';
+        });
+
+        terminalInput.addEventListener('blur', () => {
+            cursor.style.display = 'none';
+        });
+
+        // Initialize
+        createMatrixRain();
+        terminalInput.focus();
+    </script>
+</body>
+</html>
