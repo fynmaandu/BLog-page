@@ -463,22 +463,41 @@ Location: love my stable minkowski 🌌
             return "<span style='color:yellow'>Usage: post [number]</span>";
         }
 
-        const index = parseInt(args[0], 10) - 1; // convert "2" → 1
+        const index = parseInt(args[0], 10) - 1;
         const post = blogPosts.physics[index];
 
-        if (post) {
-            return `
-                <div class="post">
-                    <h2>${post.title}</h2>
-                    <p><em>Published: ${post.date}</em></p>
-                    <div>${post.content}</div>
-                </div>
-            `;
-        } else {
+        if (!post) {
             return "<span style='color:red'>No such post.</span>";
         }
+
+        // If it's a TeX post, fetch the HTML on demand
+        if (post.title === "ASAP Relativity") {
+            fetch("posts/ASAP_relativity.html")
+              .then(res => res.text())
+              .then(html => {
+                  addOutput(`
+                    <div class="post">
+                        <h2>${post.title}</h2>
+                        <p><em>Published: ${post.date}</em></p>
+                        <div>${html}</div>
+                    </div>
+                  `);
+                  MathJax.typeset();
+              });
+            return ""; // prevent empty output while fetching
+        }
+
+        // Normal posts just return stored content
+        return `
+            <div class="post">
+                <h2>${post.title}</h2>
+                <p><em>Published: ${post.date}</em></p>
+                <div>${post.content}</div>
+            </div>
+        `;
     }
-},
+}
+
 
 
             constants: {
