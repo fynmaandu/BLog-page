@@ -316,11 +316,11 @@
         });
         
         // Load the converted TeX HTML into the placeholder
-        fetch("posts/ASAP_relativity.html")
-          .then(res => res.text())
-          .then(html => {
-              // save the HTML into the blogPosts entry
-              blogPosts.physics.find(p => p.title === "ASAP_Relativity").content = html;
+       fetch("posts/ASAP_relativity.html")   // ① fetches a file with uppercase "ASAP"
+        .then(res => res.text())
+        .then(html => {
+              document.getElementById("ASAP_relativity").innerHTML = html; // ② tries to inject into a div
+              MathJax.typeset(); // ③ re-render math
           });
 
 
