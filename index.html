@@ -292,9 +292,9 @@
 
         // Sample blog posts data
         const blogPosts = {
-            physics: [
+            physics1: [
                 {
-                    title: "ASAP relativity",
+                    title: "relativity",
                     date: "2024-08-20",
                     excerpt: "If you are a highschooler and want to know how to write down math of einstein's postulates- you arrived at the perfect place.",
                     content: "hejrlvdfahbvldajfvbh",
@@ -315,30 +315,23 @@
                     equations: ["Δt' = γΔt", "γ = 1/√(1-v²/c²)"]
                 }
             ],
-            math: [
-                {
-                    title: "Complex Analysis: Contour Integration",
-                    date: "2024-08-18",
-                    excerpt: "Exploring the residue theorem and its applications in evaluating complex integrals along closed contours.",
-                    content: "Complex analysis provides powerful tools for solving real-world problems...",
-                    equations: ["∮_C f(z)dz = 2πi∑Res(f,ak)", "Res(f,a) = lim_{z→a} (z-a)f(z)"]
-                },
-                {
-                    title: "Differential Equations: Separation of Variables",
-                    date: "2024-08-12",
-                    excerpt: "A fundamental technique for solving ordinary differential equations by separating variables.",
-                    content: "Many physical phenomena can be modeled using differential equations...",
-                    equations: ["dy/dx = g(x)h(y)", "∫dy/h(y) = ∫g(x)dx"]
-                },
-                {
-                    title: "Linear Algebra: Eigenvalues and Eigenvectors",
-                    date: "2024-08-05",
-                    excerpt: "Understanding the geometric meaning of eigenvalues and their role in matrix transformations.",
-                    content: "Eigenvalues and eigenvectors are fundamental concepts in linear algebra...",
-                    equations: ["Av = λv", "det(A - λI) = 0"]
-                }
-            ]
+            
         };
+            blogPosts.physics.push({
+                title: "ASAP Relativity",
+                date: "2025-08-28",
+                excerpt: "Automatically built from my LaTeX source with images & math.",
+                content: `<div id="asap-relativity"></div>`
+            });
+            
+            // Fetch the HTML when the site loads
+            fetch("posts/ASAP_relativity.html")
+              .then(res => res.text())
+              .then(html => {
+                  document.getElementById("asap-relativity").innerHTML = html;
+                  MathJax.typeset(); // re-render math
+              });
+        
 
         // Matrix background effect
         function createMatrixRain() {
