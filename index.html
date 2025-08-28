@@ -319,8 +319,8 @@
         fetch("posts/ASAP_relativity.html")
           .then(res => res.text())
           .then(html => {
-              document.getElementById("asap-relativity").innerHTML = html;
-              MathJax.typeset(); // re-render math equations
+              // save the HTML into the blogPosts entry
+              blogPosts.physics.find(p => p.title === "ASAP_Relativity").content = html;
           });
 
 
