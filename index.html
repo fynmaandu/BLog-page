@@ -291,47 +291,37 @@
         let historyIndex = -1;
 
         // Sample blog posts data
+        // Start with empty blog lists
         const blogPosts = {
-            physics1: [
-                {
-                    title: "relativity",
-                    date: "2024-08-20",
-                    excerpt: "If you are a highschooler and want to know how to write down math of einstein's postulates- you arrived at the perfect place.",
-                    content: "hejrlvdfahbvldajfvbh",
-                    equations: ["λ = h/p", "E = ħω"]
-                },
-                {
-                    title: "Density matrices",
-                    date: "2024-08-15",
-                    excerpt: "Understanding how electric and magnetic fields propagate through space as electromagnetic radiation.",
-                    content: "Maxwell's equations describe how electric and magnetic fields are generated...",
-                    equations: ["∇⋅E = ρ/ε₀", "∇×B = μ₀J + μ₀ε₀∂E/∂t"]
-                },
-                {
-                    title: "bite sized (fun?) facts about Soft theorems",
-                    date: "2024-08-10",
-                    excerpt: "How time flows differently for observers in relative motion, with practical examples and mathematical derivations.",
-                    content: "Einstein's theory of special relativity revolutionized our understanding of space and time...",
-                    equations: ["Δt' = γΔt", "γ = 1/√(1-v²/c²)"]
-                }
-            ],
-            
+            physics: [],
+            math: []
         };
-            blogPosts.physics.push({
-                title: "ASAP Relativity",
-                date: "2025-08-28",
-                excerpt: "Automatically built from my LaTeX source with images & math.",
-                content: `<div id="asap-relativity"></div>`
-            });
-            
-            // Fetch the HTML when the site loads
-            fetch("posts/ASAP_relativity.html")
-              .then(res => res.text())
-              .then(html => {
-                  document.getElementById("asap-relativity").innerHTML = html;
-                  MathJax.typeset(); // re-render math
-              });
         
+        // Example: add one normal hardcoded post
+        blogPosts.physics.push({
+            title: "Relativity",
+            date: "2024-08-20",
+            excerpt: "If you are a highschooler and want to know how to write down math of Einstein's postulates...",
+            content: "This is where the full blog text goes.",
+            equations: ["λ = h/p", "E = ħω"]
+        });
+        
+        // Example: add one TeX → HTML post (built by GitHub Action)
+        blogPosts.physics.push({
+            title: "ASAP Relativity",
+            date: "2025-08-28",
+            excerpt: "Automatically built from my LaTeX source with images & math.",
+            content: `<div id="asap-relativity"></div>`
+        });
+        
+        // Load the converted TeX HTML into the placeholder
+        fetch("posts/ASAP_relativity.html")
+          .then(res => res.text())
+          .then(html => {
+              document.getElementById("asap-relativity").innerHTML = html;
+              MathJax.typeset(); // re-render math equations
+          });
+
 
         // Matrix background effect
         function createMatrixRain() {
