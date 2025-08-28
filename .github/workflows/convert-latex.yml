@@ -3,7 +3,7 @@ name: Convert LaTeX to HTML for Blog
 on:
   push:
     paths:
-      - "tex/**"
+      - "*.tex"   # trigger when any .tex file in root changes
 
 jobs:
   build:
@@ -17,19 +17,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra
 
-      - name: Convert TeX → HTML
+      - name: Convert sample.tex → index.html
         run: |
-          mkdir -p docs
-          for f in tex/*.tex; do
-            name=$(basename "$f" .tex)
-            pandoc "$f" -s -o "docs/$name.html" --mathjax --extract-media=docs/media
-          done
+          pandoc sample.tex -s -o index.html --mathjax --extract-media=media
 
       - name: Commit generated HTML
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/
+          git add index.html media/
           git commit -m "Auto-converted TeX to HTML" || echo "No changes to commit"
 
       - name: Push changes
