@@ -3,42 +3,36 @@ name: Convert LaTeX to HTML for Blog
 on:
   push:
     paths:
-      - "tex/**"        # Run when anything in tex/ changes
+      - "tex/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repo
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Install pandoc + TeX (basic)
       - name: Install Pandoc and TeX
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra
 
-      # Convert all .tex in tex/ to HTML in posts/
       - name: Convert TeX → HTML
         run: |
-          mkdir -p posts
+          mkdir -p docs
           for f in tex/*.tex; do
             name=$(basename "$f" .tex)
-            pandoc "$f" -s -o "posts/$name.html" --mathjax
+            pandoc "$f" -s -o "docs/$name.html" --mathjax --extract-media=docs/media
           done
 
-      # Copy images from tex/ to posts/ (so HTML can load them)
-      - name: Copy images
-        run: |
-          cp -r tex/*.png tex/*.jpg tex/*.jpeg tex/*.pdf tex/*.svg posts/ 2>/dev/null || true
-          cp -r tex/figures posts/ 2>/dev/null || true
-
-      # Commit changes back to repo
       - name: Commit generated HTML
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add posts/*.html posts/*.png posts/*.jpg posts/*.jpeg posts/*.pdf posts/*.svg posts/figures || true
+          git add docs/
           git commit -m "Auto-converted TeX to HTML" || echo "No changes to commit"
-          git push
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
