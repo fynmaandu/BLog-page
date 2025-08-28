@@ -457,33 +457,29 @@ Location: love my stable minkowski 🌌
             },
 
             post: {
-                description: 'Read a specific post',
-                execute: (args) => {
-                    const id = parseInt(args[0]);
-                    if (!id) return 'Usage: post [number]\nExample: post 1';
-                    
-                    const allPosts = [...blogPosts.physics, ...blogPosts.math];
-                    const post = allPosts[id - 1];
-                    
-                    if (!post) return `Post ${id} not found. Use 'blog' to see available posts.`;
-                    
-                    let output = `<div class="blog-post">
-<h3>${post.title}</h3>
-<div class="date">Published: ${post.date}</div>
-<div class="excerpt">${post.content}</div>`;
+    description: "Open a full blog post by number (usage: post 1, post 2, ...)",
+    execute: (args) => {
+        if (!args.length) {
+            return "<span style='color:yellow'>Usage: post [number]</span>";
+        }
 
-                    if (post.equations) {
-                        output += '<div class="equation">Key Equations:\n';
-                        post.equations.forEach(eq => {
-                            output += `${eq}\n`;
-                        });
-                        output += '</div>';
-                    }
+        const index = parseInt(args[0], 10) - 1; // convert "2" → 1
+        const post = blogPosts.physics[index];
 
-                    output += '</div>';
-                    return output;
-                }
-            },
+        if (post) {
+            return `
+                <div class="post">
+                    <h2>${post.title}</h2>
+                    <p><em>Published: ${post.date}</em></p>
+                    <div>${post.content}</div>
+                </div>
+            `;
+        } else {
+            return "<span style='color:red'>No such post.</span>";
+        }
+    }
+},
+
 
             constants: {
                 description: 'Physical constants',
