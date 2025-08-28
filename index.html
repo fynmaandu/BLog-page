@@ -309,10 +309,10 @@
         
         // Example: add one TeX → HTML post (built by GitHub Action)
         blogPosts.physics.push({
-            title: "ASAP Relativity",
+            title: "ASAP_relativity",
             date: "2025-08-28",
             excerpt: "Automatically built from my LaTeX source with images & math.",
-            content: `<div id="asap-relativity"></div>`
+            content: `<div id="ASAP_relativity"></div>`
         });
         
         // Load the converted TeX HTML into the placeholder
@@ -471,7 +471,7 @@ Location: love my stable minkowski 🌌
         }
 
         // If it's a TeX post, fetch the HTML on demand
-        if (post.title === "ASAP Relativity") {
+        if (post.title === "ASAP_relativity") {
             fetch("posts/ASAP_relativity.html")
               .then(res => res.text())
               .then(html => {
